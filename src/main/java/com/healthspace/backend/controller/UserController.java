@@ -17,11 +17,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    // POST /api/users/register
-    @PostMapping("/register")
-    public User registerUser(@RequestBody User user) {
-        return userService.createUser(user);
-    }
+    // POST /api/users/register (REMOVED FROM HERE)
 
     // GET /api/users
     @GetMapping
