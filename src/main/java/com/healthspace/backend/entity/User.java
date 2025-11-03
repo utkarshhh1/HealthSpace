@@ -1,4 +1,4 @@
-package com.healthspace.entity;
+package com.healthspace.backend.entity;
 
 import jakarta.persistence.*;
 

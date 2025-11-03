@@ -1,4 +1,4 @@
-package com.healthspace.config;
+package com.healthspace.backend.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,9 +1,9 @@
-package com.healthspace.service;
+package com.healthspace.backend.service;
 
-import com.healthspace.entity.User;
-import com.healthspace.repository.UserRepository;
+import com.healthspace.backend.entity.User;
+import com.healthspace.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder; // <-- IMPORT THIS
+import org.springframework.security.crypto.password.PasswordEncoder; // <-- IMPORTED
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,7 +16,7 @@ public class UserService {
     private UserRepository userRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder; // <-- INJECT THE ENCODER
+    private PasswordEncoder passwordEncoder; // <-- INJECTED
 
     public User createUser(User user) {
         // ⭐ HERE IS THE CHANGE: Hash the password before saving
