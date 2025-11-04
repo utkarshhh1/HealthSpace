@@ -1044,3 +1044,263 @@ Caused by: java.lang.NullPointerException: Cannot invoke "Object.getClass()" bec
 2025-11-04T02:17:30.037+05:30  INFO 21704 --- [backend] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2025-11-04T02:17:30.039+05:30  INFO 21704 --- [backend] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2025-11-04T02:17:30.043+05:30  INFO 21704 --- [backend] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-11-04T14:59:07.662+05:30  INFO 6844 --- [backend] [main] c.h.backend.BackendApplication           : Starting BackendApplication using Java 24.0.2 with PID 6844 (C:\Users\jhjos\OneDrive\Desktop\HealthSpace\target\classes started by jhjos in C:\Users\jhjos\OneDrive\Desktop\HealthSpace)
+2025-11-04T14:59:07.664+05:30  INFO 6844 --- [backend] [main] c.h.backend.BackendApplication           : No active profile set, falling back to 1 default profile: "default"
+2025-11-04T14:59:08.449+05:30  INFO 6844 --- [backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-11-04T14:59:08.524+05:30  INFO 6844 --- [backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 63 ms. Found 4 JPA repository interfaces.
+2025-11-04T14:59:09.212+05:30  INFO 6844 --- [backend] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-11-04T14:59:09.230+05:30  INFO 6844 --- [backend] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-11-04T14:59:09.231+05:30  INFO 6844 --- [backend] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.48]
+2025-11-04T14:59:09.296+05:30  INFO 6844 --- [backend] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-11-04T14:59:09.297+05:30  INFO 6844 --- [backend] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1577 ms
+2025-11-04T14:59:09.478+05:30  INFO 6844 --- [backend] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-11-04T14:59:09.547+05:30  INFO 6844 --- [backend] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.33.Final
+2025-11-04T14:59:09.587+05:30  INFO 6844 --- [backend] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-11-04T14:59:09.931+05:30  INFO 6844 --- [backend] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-11-04T14:59:09.970+05:30  INFO 6844 --- [backend] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-11-04T14:59:10.194+05:30  INFO 6844 --- [backend] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@6abb7b7d
+2025-11-04T14:59:10.196+05:30  INFO 6844 --- [backend] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-11-04T14:59:10.307+05:30  INFO 6844 --- [backend] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 18.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-11-04T14:59:11.275+05:30  INFO 6844 --- [backend] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-11-04T14:59:11.357+05:30  INFO 6844 --- [backend] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-11-04T14:59:11.887+05:30  INFO 6844 --- [backend] [main] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2025-11-04T14:59:11.887+05:30  WARN 6844 --- [backend] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2025-11-04T14:59:12.088+05:30 DEBUG 6844 --- [backend] [main] s.w.s.m.m.a.RequestMappingHandlerMapping : 18 mappings in 'requestMappingHandlerMapping'
+2025-11-04T14:59:12.201+05:30 DEBUG 6844 --- [backend] [main] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/webjars/**, /**] in 'resourceHandlerMapping'
+2025-11-04T14:59:12.329+05:30 DEBUG 6844 --- [backend] [main] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2025-11-04T14:59:12.391+05:30 DEBUG 6844 --- [backend] [main] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 0 @ExceptionHandler, 1 ResponseBodyAdvice
+2025-11-04T14:59:12.676+05:30  INFO 6844 --- [backend] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-11-04T14:59:12.685+05:30  INFO 6844 --- [backend] [main] c.h.backend.BackendApplication           : Started BackendApplication in 5.659 seconds (process running for 6.49)
+2025-11-04T15:03:48.843+05:30  INFO 6844 --- [backend] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-11-04T15:03:48.855+05:30  INFO 6844 --- [backend] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-11-04T15:03:48.863+05:30  INFO 6844 --- [backend] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-11-04T15:03:48.868+05:30  INFO 6844 --- [backend] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-11-04T15:03:48.871+05:30  INFO 6844 --- [backend] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-11-04T15:07:49.056+05:30  INFO 15692 --- [backend] [main] c.h.backend.BackendApplication           : Starting BackendApplication using Java 24.0.2 with PID 15692 (C:\Users\jhjos\OneDrive\Desktop\HealthSpace\target\classes started by jhjos in C:\Users\jhjos\OneDrive\Desktop\HealthSpace)
+2025-11-04T15:07:49.058+05:30  INFO 15692 --- [backend] [main] c.h.backend.BackendApplication           : No active profile set, falling back to 1 default profile: "default"
+2025-11-04T15:07:49.852+05:30  INFO 15692 --- [backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-11-04T15:07:49.964+05:30  INFO 15692 --- [backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 99 ms. Found 4 JPA repository interfaces.
+2025-11-04T15:07:50.737+05:30  INFO 15692 --- [backend] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-11-04T15:07:50.756+05:30  INFO 15692 --- [backend] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-11-04T15:07:50.756+05:30  INFO 15692 --- [backend] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.48]
+2025-11-04T15:07:50.825+05:30  INFO 15692 --- [backend] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-11-04T15:07:50.826+05:30  INFO 15692 --- [backend] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1708 ms
+2025-11-04T15:07:51.015+05:30  INFO 15692 --- [backend] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-11-04T15:07:51.093+05:30  INFO 15692 --- [backend] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.33.Final
+2025-11-04T15:07:51.149+05:30  INFO 15692 --- [backend] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-11-04T15:07:51.548+05:30  INFO 15692 --- [backend] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-11-04T15:07:51.590+05:30  INFO 15692 --- [backend] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-11-04T15:07:51.798+05:30  INFO 15692 --- [backend] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@57f0bfc3
+2025-11-04T15:07:51.800+05:30  INFO 15692 --- [backend] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-11-04T15:07:51.885+05:30  INFO 15692 --- [backend] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 18.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-11-04T15:07:53.002+05:30  INFO 15692 --- [backend] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-11-04T15:07:53.063+05:30  INFO 15692 --- [backend] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-11-04T15:07:53.806+05:30  INFO 15692 --- [backend] [main] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2025-11-04T15:07:53.807+05:30  WARN 15692 --- [backend] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2025-11-04T15:07:54.056+05:30 DEBUG 15692 --- [backend] [main] s.w.s.m.m.a.RequestMappingHandlerMapping : 18 mappings in 'requestMappingHandlerMapping'
+2025-11-04T15:07:54.221+05:30 DEBUG 15692 --- [backend] [main] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/webjars/**, /**] in 'resourceHandlerMapping'
+2025-11-04T15:07:54.347+05:30 DEBUG 15692 --- [backend] [main] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2025-11-04T15:07:54.408+05:30 DEBUG 15692 --- [backend] [main] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 0 @ExceptionHandler, 1 ResponseBodyAdvice
+2025-11-04T15:07:54.779+05:30  INFO 15692 --- [backend] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-11-04T15:07:54.791+05:30  INFO 15692 --- [backend] [main] c.h.backend.BackendApplication           : Started BackendApplication in 6.364 seconds (process running for 7.164)
+2025-11-04T15:08:39.712+05:30  INFO 15692 --- [backend] [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-11-04T15:08:39.712+05:30  INFO 15692 --- [backend] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-11-04T15:08:39.713+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Detected StandardServletMultipartResolver
+2025-11-04T15:08:39.713+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Detected AcceptHeaderLocaleResolver
+2025-11-04T15:08:39.714+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Detected FixedThemeResolver
+2025-11-04T15:08:39.715+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Detected org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator@29b2a94c
+2025-11-04T15:08:39.716+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Detected org.springframework.web.servlet.support.SessionFlashMapManager@70ebaa1e
+2025-11-04T15:08:39.717+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : enableLoggingRequestDetails='false': request parameters and headers will be masked to prevent unsafe logging of potentially sensitive data
+2025-11-04T15:08:39.718+05:30  INFO 15692 --- [backend] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 5 ms
+2025-11-04T15:08:39.764+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : POST "/api/auth/register", parameters={}
+2025-11-04T15:08:39.767+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-1] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.healthspace.backend.controller.AuthController#registerUser(User)
+2025-11-04T15:08:39.906+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-1] m.m.a.RequestResponseBodyMethodProcessor : Read "application/json;charset=UTF-8" to [com.healthspace.backend.entity.User@4623a4b1]
+2025-11-04T15:08:40.129+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-1] org.hibernate.SQL                        : 
+    insert 
+    into
+        users
+        (email, name, password, role) 
+    values
+        (?, ?, ?, ?)
+2025-11-04T15:08:40.227+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-1] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-11-04T15:08:40.229+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-1] m.m.a.RequestResponseBodyMethodProcessor : Writing [com.healthspace.backend.entity.User@4623a4b1]
+2025-11-04T15:08:40.247+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-11-04T15:09:04.407+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : POST "/api/auth/register", parameters={}
+2025-11-04T15:09:04.408+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-4] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.healthspace.backend.controller.AuthController#registerUser(User)
+2025-11-04T15:09:04.409+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-4] m.m.a.RequestResponseBodyMethodProcessor : Read "application/json;charset=UTF-8" to [com.healthspace.backend.entity.User@57266512]
+2025-11-04T15:09:04.559+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-4] org.hibernate.SQL                        : 
+    insert 
+    into
+        users
+        (email, name, password, role) 
+    values
+        (?, ?, ?, ?)
+2025-11-04T15:09:04.572+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-4] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-11-04T15:09:04.572+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-4] m.m.a.RequestResponseBodyMethodProcessor : Writing [com.healthspace.backend.entity.User@57266512]
+2025-11-04T15:09:04.574+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-11-04T15:09:29.486+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : POST "/api/auth/login", parameters={}
+2025-11-04T15:09:29.487+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-3] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.healthspace.backend.controller.AuthController#login(AuthRequest)
+2025-11-04T15:09:29.489+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-3] m.m.a.RequestResponseBodyMethodProcessor : Read "application/json;charset=UTF-8" to [com.healthspace.backend.dto.AuthRequest@b2f19ec]
+2025-11-04T15:09:29.721+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2025-11-04T15:09:29.916+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2025-11-04T15:09:29.975+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-3] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-11-04T15:09:29.975+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-3] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.healthspace.backend.dto.AuthResponse@75172e1f]
+2025-11-04T15:09:29.977+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-11-04T15:14:12.888+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : POST "/api/auth/login", parameters={}
+2025-11-04T15:14:12.889+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-2] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.healthspace.backend.controller.AuthController#login(AuthRequest)
+2025-11-04T15:14:12.890+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-2] m.m.a.RequestResponseBodyMethodProcessor : Read "application/json;charset=UTF-8" to [com.healthspace.backend.dto.AuthRequest@4e7560bd]
+2025-11-04T15:14:12.893+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-2] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2025-11-04T15:14:13.051+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-2] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2025-11-04T15:14:13.055+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-2] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-11-04T15:14:13.055+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-2] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.healthspace.backend.dto.AuthResponse@71a761f1]
+2025-11-04T15:14:13.056+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-11-04T15:15:51.142+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-4] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2025-11-04T15:15:51.148+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : POST "/api/appointments/book", parameters={}
+2025-11-04T15:15:51.149+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-4] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.healthspace.backend.controller.AppointmentController#bookAppointment(Appointment)
+2025-11-04T15:15:51.156+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-4] m.m.a.RequestResponseBodyMethodProcessor : Read "application/json;charset=UTF-8" to [com.healthspace.backend.entity.Appointment@3237037f]
+2025-11-04T15:15:51.204+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-4] org.hibernate.SQL                        : 
+    insert 
+    into
+        appointments
+        (appointment_time, doctor_id, notes, patient_id, status) 
+    values
+        (?, ?, ?, ?, ?)
+2025-11-04T15:15:51.215+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-4] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-11-04T15:15:51.215+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-4] m.m.a.RequestResponseBodyMethodProcessor : Writing [com.healthspace.backend.entity.Appointment@3237037f]
+2025-11-04T15:15:51.217+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-11-04T15:16:30.687+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2025-11-04T15:16:30.694+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : POST "/api/prescriptions/create", parameters={}
+2025-11-04T15:16:30.695+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-3] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.healthspace.backend.controller.PrescriptionController#createPrescription(Prescription)
+2025-11-04T15:16:30.699+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-3] m.m.a.RequestResponseBodyMethodProcessor : Read "application/json;charset=UTF-8" to [com.healthspace.backend.entity.Prescription@6e43d88f]
+2025-11-04T15:16:30.705+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Failed to complete request: org.springframework.security.authorization.AuthorizationDeniedException: Access Denied
+2025-11-04T15:17:07.260+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : POST "/api/auth/login", parameters={}
+2025-11-04T15:17:07.261+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-5] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.healthspace.backend.controller.AuthController#login(AuthRequest)
+2025-11-04T15:17:07.262+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-5] m.m.a.RequestResponseBodyMethodProcessor : Read "application/json;charset=UTF-8" to [com.healthspace.backend.dto.AuthRequest@24a5e11c]
+2025-11-04T15:17:07.264+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-5] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2025-11-04T15:17:07.410+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-5] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2025-11-04T15:17:07.414+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-5] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-11-04T15:17:07.414+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-5] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.healthspace.backend.dto.AuthResponse@3c818fa2]
+2025-11-04T15:17:07.415+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-11-04T15:18:05.932+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-6] org.hibernate.SQL                        : 
+    select
+        u1_0.id,
+        u1_0.email,
+        u1_0.name,
+        u1_0.password,
+        u1_0.role 
+    from
+        users u1_0 
+    where
+        u1_0.email=?
+2025-11-04T15:18:05.940+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : POST "/api/prescriptions/create", parameters={}
+2025-11-04T15:18:05.940+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-6] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.healthspace.backend.controller.PrescriptionController#createPrescription(Prescription)
+2025-11-04T15:18:05.942+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-6] m.m.a.RequestResponseBodyMethodProcessor : Read "application/json;charset=UTF-8" to [com.healthspace.backend.entity.Prescription@4906559c]
+2025-11-04T15:18:05.944+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-6] org.hibernate.SQL                        : 
+    insert 
+    into
+        prescriptions
+        (appointment_id, date_issued, doctor_id, instructions, medication_details, patient_id) 
+    values
+        (?, ?, ?, ?, ?, ?)
+2025-11-04T15:18:05.954+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-6] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-11-04T15:18:05.954+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-6] m.m.a.RequestResponseBodyMethodProcessor : Writing [com.healthspace.backend.entity.Prescription@4906559c]
+2025-11-04T15:18:05.958+05:30 DEBUG 15692 --- [backend] [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-11-04T15:23:24.372+05:30  INFO 15692 --- [backend] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-11-04T15:23:24.382+05:30  INFO 15692 --- [backend] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-11-04T15:23:24.389+05:30  INFO 15692 --- [backend] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-11-04T15:23:24.391+05:30  INFO 15692 --- [backend] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-11-04T15:23:24.395+05:30  INFO 15692 --- [backend] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

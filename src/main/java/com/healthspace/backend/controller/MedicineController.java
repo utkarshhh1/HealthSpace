@@ -4,6 +4,7 @@ import com.healthspace.backend.entity.Medicine;
 import com.healthspace.backend.service.MedicineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize; // <-- IMPORT THIS
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,30 +17,32 @@ public class MedicineController {
     @Autowired
     private MedicineService medicineService;
 
-    // GET /api/medicines
-    // Get all medicines
+    // Anyone who is logged in (authenticated) can see medicines
     @GetMapping
+    @PreAuthorize("isAuthenticated()")
     public List<Medicine> getAllMedicines() {
         return medicineService.getAllMedicines();
     }
 
-    // POST /api/medicines/add
-    // (This would be an Admin-only endpoint)
+    // Only an 'ADMIN' can add a new medicine to the store
     @PostMapping("/add")
+    @PreAuthorize("hasRole('ADMIN')")
     public Medicine addMedicine(@RequestBody Medicine medicine) {
         return medicineService.addMedicine(medicine);
     }
 
-    // GET /api/medicines/1
+    // Anyone logged in can see a single medicine
     @GetMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Medicine> getMedicineById(@PathVariable Long id) {
         return medicineService.getMedicineById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // GET /api/medicines/search?name=crocin
+    // Anyone logged in can search
     @GetMapping("/search")
+    @PreAuthorize("isAuthenticated()")
     public List<Medicine> searchMedicines(@RequestParam String name) {
         return medicineService.searchMedicineByName(name);
     }
