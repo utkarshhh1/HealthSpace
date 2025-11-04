@@ -1,5 +1,4 @@
 package com.healthspace.backend.repository;
-
 import com.healthspace.backend.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

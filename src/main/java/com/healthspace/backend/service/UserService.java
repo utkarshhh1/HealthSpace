@@ -4,15 +4,13 @@ import com.healthspace.backend.entity.User;
 import com.healthspace.backend.repository.UserRepository;
 import com.healthspace.backend.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.authority.SimpleGrantedAuthority; // <-- IMPORT THIS
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List; // <-- IMPORT THIS
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,42 +26,33 @@ public class UserService implements UserDetailsService {
     private JwtUtil jwtUtil;
 
     public User createUser(User user) {
-        String hashedPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(hashedPassword);
+        // Ensure role is uppercase for consistency
+        user.setRole(user.getRole().toUpperCase());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
     public String loginUser(String email, String password) throws Exception {
+        // Find the user by email
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
+        // Check if the provided password matches
         if (passwordEncoder.matches(password, user.getPassword())) {
-            // Use our updated method to get UserDetails with roles
-            UserDetails userDetails = loadUserByUsername(email);
-            return jwtUtil.generateToken(userDetails);
+            // Since our User entity *is* the UserDetails, we just pass it
+            return jwtUtil.generateToken(user);
         } else {
             throw new Exception("Invalid credentials");
         }
     }
 
-    // --- THIS METHOD IS UPDATED ---
+    // --- THIS METHOD IS NOW MUCH SIMPLER ---
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email)
+        // Just find the user by email and return it.
+        // It already implements UserDetails!
+        return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
-
-        // Create a list of authorities (roles)
-        // We MUST add "ROLE_" prefix. Spring Security expects it.
-        // We also use .toUpperCase() to be safe (e.g., "patient" -> "ROLE_PATIENT")
-        List<SimpleGrantedAuthority> authorities = List.of(
-                new SimpleGrantedAuthority("ROLE_" + user.getRole().toUpperCase())
-        );
-
-        return new org.springframework.security.core.userdetails.User(
-                user.getEmail(),
-                user.getPassword(),
-                authorities // <-- Pass the roles here
-        );
     }
     // --- END OF UPDATE ---
 

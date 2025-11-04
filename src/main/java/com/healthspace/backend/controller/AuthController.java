@@ -1,8 +1,7 @@
 package com.healthspace.backend.controller;
-
+import com.healthspace.backend.entity.User;
 import com.healthspace.backend.dto.AuthRequest;
 import com.healthspace.backend.dto.AuthResponse;
-import com.healthspace.backend.entity.User;
 import com.healthspace.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

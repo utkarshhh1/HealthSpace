@@ -1,5 +1,4 @@
 package com.healthspace.backend.controller;
-
 import com.healthspace.backend.entity.User;
 import com.healthspace.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
