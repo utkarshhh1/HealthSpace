@@ -5,86 +5,73 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
 @Entity
 @Table(name = "users")
-public class User implements UserDetails { // <-- IMPLEMENTS UserDetails
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
 
     @Column(unique = true, nullable = false)
     private String email;
 
+    @Column(nullable = false)
     private String password;
 
     @Column(nullable = false)
-    private String role; // "PATIENT", "DOCTOR", "ADMIN", "HOSPITAL_ADMIN"
+    private String role; // PATIENT, DOCTOR, HOSPITAL_ADMIN, ADMIN
 
-    // This links a HOSPITAL_ADMIN user to their hospital
-    @Column(nullable = true)
-    private Long hospitalId;
+    private String contactPhone; // Moved here as it's useful for login/2FA later
 
-    // --- Getters and Setters for your fields ---
+    private boolean isEnabled = true; // Trust Architecture: Admin can ban users
 
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
+
+    // --- Getters & Setters ---
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
-
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
-
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }
-
-    public Long getHospitalId() { return hospitalId; }
-    public void setHospitalId(Long hospitalId) { this.hospitalId = hospitalId; }
-
-    // --- UserDetails Method Implementations ---
+    public String getContactPhone() { return contactPhone; }
+    public void setContactPhone(String contactPhone) { this.contactPhone = contactPhone; }
+    public void setEnabled(boolean enabled) { isEnabled = enabled; }
 
     @Override
-    public String getPassword() {
-        return this.password;
-    }
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 
     @Override
-    public String getUsername() {
-        return this.email; // Use email as the username
-    }
+    public String getUsername() { return email; }
+
+    @Override
+    public boolean isAccountNonExpired() { return true; }
+    @Override
+    public boolean isAccountNonLocked() { return true; }
+    @Override
+    public boolean isCredentialsNonExpired() { return true; }
+    @Override
+    public boolean isEnabled() { return isEnabled; }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Return a list containing the user's role
         return List.of(new SimpleGrantedAuthority("ROLE_" + this.role.toUpperCase()));
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true; // Default to true
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true; // Default to true
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true; // Default to true
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true; // Default to true
     }
 }

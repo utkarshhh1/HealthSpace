@@ -1,13 +1,11 @@
 package com.healthspace.backend.service;
 
 import com.healthspace.backend.entity.DoctorProfile;
-import com.healthspace.backend.entity.User;
+import com.healthspace.backend.entity.HospitalAdminProfile;
 import com.healthspace.backend.repository.DoctorProfileRepository;
-import com.healthspace.backend.repository.UserRepository;
+import com.healthspace.backend.repository.HospitalAdminProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -17,43 +15,47 @@ public class HospitalAdminService {
     private DoctorProfileRepository doctorProfileRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private HospitalAdminProfileRepository adminProfileRepository;
 
-    // Get all doctors waiting for approval at a specific hospital
+    // Helper method to get Hospital ID for a logged-in Admin
+    public Long getHospitalIdForAdmin(Long userId) {
+        HospitalAdminProfile profile = adminProfileRepository.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("Access Denied: You are not linked to any Hospital."));
+        return profile.getHospital().getId();
+    }
+
     public List<DoctorProfile> getPendingDoctors(Long hospitalId) {
         return doctorProfileRepository.findByHospitalIdAndAffiliationStatus(hospitalId, "PENDING");
     }
 
-    // Approve a doctor
     public DoctorProfile approveDoctor(Long doctorProfileId, Long hospitalAdminUserId) {
-        // Find the admin user
-        User admin = userRepository.findById(hospitalAdminUserId)
-                .orElseThrow(() -> new UsernameNotFoundException("Admin user not found"));
+        // 1. Get the Admin's Hospital ID
+        Long adminHospitalId = getHospitalIdForAdmin(hospitalAdminUserId);
 
-        // Find the doctor's profile
+        // 2. Get the Doctor Profile
         DoctorProfile doctorProfile = doctorProfileRepository.findById(doctorProfileId)
                 .orElseThrow(() -> new RuntimeException("Doctor profile not found"));
 
-        // **Security Check:** Does this admin manage the hospital this doctor applied to?
-        if (!admin.getHospitalId().equals(doctorProfile.getHospital().getId())) {
-            throw new SecurityException("Admin not authorized to approve doctors for this hospital.");
+        // 3. Security Check: Do they match?
+        if (!adminHospitalId.equals(doctorProfile.getHospital().getId())) {
+            throw new SecurityException("You cannot approve a doctor for a different hospital.");
         }
 
-        // If checks pass, approve the doctor
         doctorProfile.setAffiliationStatus("VERIFIED");
         return doctorProfileRepository.save(doctorProfile);
     }
 
-    // You could also add a rejectDoctor() method here
     public DoctorProfile rejectDoctor(Long doctorProfileId, Long hospitalAdminUserId) {
-        User admin = userRepository.findById(hospitalAdminUserId)
-                .orElseThrow(() -> new UsernameNotFoundException("Admin user not found"));
+        // 1. Get the Admin's Hospital ID
+        Long adminHospitalId = getHospitalIdForAdmin(hospitalAdminUserId);
 
+        // 2. Get the Doctor Profile
         DoctorProfile doctorProfile = doctorProfileRepository.findById(doctorProfileId)
                 .orElseThrow(() -> new RuntimeException("Doctor profile not found"));
 
-        if (!admin.getHospitalId().equals(doctorProfile.getHospital().getId())) {
-            throw new SecurityException("Admin not authorized to reject doctors for this hospital.");
+        // 3. Security Check
+        if (!adminHospitalId.equals(doctorProfile.getHospital().getId())) {
+            throw new SecurityException("Unauthorized action.");
         }
 
         doctorProfile.setAffiliationStatus("REJECTED");

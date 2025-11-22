@@ -1,6 +1,7 @@
 package com.healthspace.backend.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "patient_profiles")
@@ -10,37 +11,40 @@ public class PatientProfile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // This is the link back to the main User table
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
-    // All the fields you asked for
-    private String gender;
-    private int age;
-    private double weight;
-    private String contactNo;
-    private String address;
+    private LocalDate dob; // Replaces 'age' for accuracy
+    private String gender; // MALE, FEMALE, OTHER
+    private String bloodGroup;
 
-    // Getters and Setters
+    private Double height; // cm
+    private Double weight; // kg
+
+    private String address;
+    private String emergencyContactName;
+    private String emergencyContactPhone;
+
+    // --- Getters & Setters ---
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-
     public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }
-
+    public LocalDate getDob() { return dob; }
+    public void setDob(LocalDate dob) { this.dob = dob; }
     public String getGender() { return gender; }
     public void setGender(String gender) { this.gender = gender; }
-
-    public int getAge() { return age; }
-    public void setAge(int age) { this.age = age; }
-
-    public double getWeight() { return weight; }
-    public void setWeight(double weight) { this.weight = weight; }
-
-    public String getContactNo() { return contactNo; }
-    public void setContactNo(String contactNo) { this.contactNo = contactNo; }
-
+    public String getBloodGroup() { return bloodGroup; }
+    public void setBloodGroup(String bloodGroup) { this.bloodGroup = bloodGroup; }
+    public Double getHeight() { return height; }
+    public void setHeight(Double height) { this.height = height; }
+    public Double getWeight() { return weight; }
+    public void setWeight(Double weight) { this.weight = weight; }
     public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }
+    public String getEmergencyContactName() { return emergencyContactName; }
+    public void setEmergencyContactName(String emergencyContactName) { this.emergencyContactName = emergencyContactName; }
+    public String getEmergencyContactPhone() { return emergencyContactPhone; }
+    public void setEmergencyContactPhone(String emergencyContactPhone) { this.emergencyContactPhone = emergencyContactPhone; }
 }

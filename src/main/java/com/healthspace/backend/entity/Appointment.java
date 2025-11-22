@@ -11,35 +11,36 @@ public class Appointment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // We will just store the IDs of the patient and doctor
     @Column(nullable = false)
-    private Long patientId;
+    private Long patientId; // Keeping IDs for performance (Clean Cluster Ref)
 
     @Column(nullable = false)
     private Long doctorId;
 
+    @Column(nullable = false)
+    private Long hospitalId; // Context
+
+    @Column(nullable = false)
     private LocalDateTime appointmentTime;
 
-    private String status; // e.g., "BOOKED", "CANCELLED", "COMPLETED"
+    @Column(nullable = false)
+    private String status; // BOOKED, COMPLETED, CANCELLED
 
-    private String notes; // Optional notes for the appointment
+    private String symptoms; // Reason for visit
 
-    // Getters and Setters
+    // --- Getters & Setters ---
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-
     public Long getPatientId() { return patientId; }
     public void setPatientId(Long patientId) { this.patientId = patientId; }
-
     public Long getDoctorId() { return doctorId; }
     public void setDoctorId(Long doctorId) { this.doctorId = doctorId; }
-
+    public Long getHospitalId() { return hospitalId; }
+    public void setHospitalId(Long hospitalId) { this.hospitalId = hospitalId; }
     public LocalDateTime getAppointmentTime() { return appointmentTime; }
     public void setAppointmentTime(LocalDateTime appointmentTime) { this.appointmentTime = appointmentTime; }
-
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
-
-    public String getNotes() { return notes; }
-    public void setNotes(String notes) { this.notes = notes; }
+    public String getSymptoms() { return symptoms; }
+    public void setSymptoms(String symptoms) { this.symptoms = symptoms; }
 }

@@ -19,39 +19,33 @@ public class DoctorProfile {
     private Hospital hospital;
 
     @Column(nullable = false)
-    private String specialty;
+    private String specialty; // e.g., Cardiology
 
-    private String qualifications;
-    private String gender;
-    private int age;
-
-    // --- NEW FIELD ---
     @Column(nullable = false)
-    private String affiliationStatus; // "PENDING", "VERIFIED", "REJECTED"
+    private String degree; // e.g., MBBS, MD
 
-    // --- Getters and Setters ---
+    private Integer experienceYears;
 
+    @Column(nullable = false)
+    private String affiliationStatus = "PENDING"; // PENDING, VERIFIED, REJECTED
+
+    private Double consultationFee;
+
+    // --- Getters & Setters ---
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-
     public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }
-
     public Hospital getHospital() { return hospital; }
     public void setHospital(Hospital hospital) { this.hospital = hospital; }
-
     public String getSpecialty() { return specialty; }
     public void setSpecialty(String specialty) { this.specialty = specialty; }
-
-    public String getQualifications() { return qualifications; }
-    public void setQualifications(String qualifications) { this.qualifications = qualifications; }
-
-    public String getGender() { return gender; }
-    public void setGender(String gender) { this.gender = gender; }
-
-    public int getAge() { return age; }
-    public void setAge(int age) { this.age = age; }
-
+    public String getDegree() { return degree; }
+    public void setDegree(String degree) { this.degree = degree; }
+    public Integer getExperienceYears() { return experienceYears; }
+    public void setExperienceYears(Integer experienceYears) { this.experienceYears = experienceYears; }
     public String getAffiliationStatus() { return affiliationStatus; }
     public void setAffiliationStatus(String affiliationStatus) { this.affiliationStatus = affiliationStatus; }
+    public Double getConsultationFee() { return consultationFee; }
+    public void setConsultationFee(Double consultationFee) { this.consultationFee = consultationFee; }
 }

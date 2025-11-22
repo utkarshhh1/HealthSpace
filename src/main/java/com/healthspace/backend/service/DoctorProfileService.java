@@ -1,7 +1,8 @@
 package com.healthspace.backend.service;
-import com.healthspace.backend.entity.User;
+
 import com.healthspace.backend.entity.DoctorProfile;
 import com.healthspace.backend.entity.Hospital;
+import com.healthspace.backend.entity.User;
 import com.healthspace.backend.repository.DoctorProfileRepository;
 import com.healthspace.backend.repository.HospitalRepository;
 import com.healthspace.backend.repository.UserRepository;
@@ -29,26 +30,23 @@ public class DoctorProfileService {
 
         profile.setUser(user);
 
-        // Handle optional hospital linking
+        // Handle Hospital Link
         if (profileDetails.getHospital() != null && profileDetails.getHospital().getId() != null) {
             Hospital hospital = hospitalRepository.findById(profileDetails.getHospital().getId())
                     .orElseThrow(() -> new RuntimeException("Hospital not found"));
             profile.setHospital(hospital);
-        } else {
-            profile.setHospital(null);
         }
 
+        // Updated Field Mappings
         profile.setSpecialty(profileDetails.getSpecialty());
-        profile.setQualifications(profileDetails.getQualifications());
-        profile.setGender(profileDetails.getGender());
-        profile.setAge(profileDetails.getAge());
+        profile.setDegree(profileDetails.getDegree()); // Renamed from qualifications
+        profile.setExperienceYears(profileDetails.getExperienceYears());
+        profile.setConsultationFee(profileDetails.getConsultationFee());
 
-        // --- NEW LOGIC ---
-        // If this is a new profile, set its status to PENDING
+        // Status Logic: If updating, keep existing status. If new, set PENDING.
         if (profile.getId() == null) {
             profile.setAffiliationStatus("PENDING");
         }
-        // --- END OF NEW LOGIC ---
 
         return profileRepository.save(profile);
     }

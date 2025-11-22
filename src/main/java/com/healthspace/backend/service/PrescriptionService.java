@@ -1,13 +1,17 @@
 package com.healthspace.backend.service;
 
-import com.healthspace.backend.entity.Appointment; // <-- NEW IMPORT
+import com.healthspace.backend.dto.PrescriptionItemRequest;
+import com.healthspace.backend.dto.PrescriptionRequest;
+import com.healthspace.backend.entity.Appointment;
 import com.healthspace.backend.entity.Prescription;
-import com.healthspace.backend.repository.AppointmentRepository; // <-- NEW IMPORT
+import com.healthspace.backend.entity.PrescriptionItem;
+import com.healthspace.backend.repository.AppointmentRepository;
 import com.healthspace.backend.repository.PrescriptionRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -17,42 +21,50 @@ public class PrescriptionService {
     private PrescriptionRepository prescriptionRepository;
 
     @Autowired
-    private AppointmentRepository appointmentRepository; // <-- INJECT THE APPOINTMENT REPO
+    private AppointmentRepository appointmentRepository;
 
-    // --- THIS METHOD IS NOW SMARTER ---
-    public Prescription createPrescription(Prescription prescription) {
+    @Transactional // Important: Either everything saves, or nothing saves.
+    public Prescription createPrescription(PrescriptionRequest request, Long doctorId) {
 
-        // --- NEW VALIDATION LOGIC ---
-        // 1. Get the IDs from the incoming prescription request
-        Long appId = prescription.getAppointmentId();
-        Long patientId = prescription.getPatientId();
-        Long doctorId = prescription.getDoctorId();
+        // 1. Validate Appointment Context
+        Appointment appointment = appointmentRepository.findById(request.getAppointmentId())
+                .orElseThrow(() -> new RuntimeException("Appointment not found"));
 
-        // 2. Find the appointment in the database
-        Appointment appointment = appointmentRepository.findById(appId)
-                .orElseThrow(() -> new RuntimeException("Appointment not found with id: " + appId));
-
-        // 3. Verify that the appointment's patient and doctor match the prescription
-        if (!appointment.getPatientId().equals(patientId) || !appointment.getDoctorId().equals(doctorId)) {
-            throw new RuntimeException("Error: Prescription patient/doctor do not match the appointment record.");
+        if (!appointment.getDoctorId().equals(doctorId)) {
+            throw new SecurityException("You are not the authorized doctor for this appointment.");
         }
 
-        // 4. (Optional) You could also check if the appointment status is "COMPLETED"
-        // if (!"COMPLETED".equals(appointment.getStatus())) {
-        //     throw new RuntimeException("Cannot create prescription for an appointment that is not completed.");
-        // }
-        // --- END OF VALIDATION ---
+        // 2. Create Prescription Header
+        Prescription prescription = new Prescription();
+        prescription.setAppointment(appointment);
+        prescription.setPatientId(appointment.getPatientId());
+        prescription.setDoctorId(doctorId);
+        prescription.setDiagnosis(request.getDiagnosis());
+        prescription.setNotes(request.getNotes());
 
-        // If all checks pass, save the prescription
-        prescription.setDateIssued(LocalDate.now());
+        // 3. Map Items (The List Logic)
+        List<PrescriptionItem> items = new ArrayList<>();
+        for (PrescriptionItemRequest itemReq : request.getMedicines()) {
+            PrescriptionItem item = new PrescriptionItem();
+            item.setMedicineName(itemReq.getMedicineName());
+            item.setDosage(itemReq.getDosage());
+            item.setFrequency(itemReq.getFrequency());
+            item.setDuration(itemReq.getDuration());
+            item.setPrescription(prescription); // Link child to parent
+            items.add(item);
+        }
+
+        prescription.setMedicines(items); // Link parent to children
+
+        // 4. Update Appointment Status
+        appointment.setStatus("COMPLETED");
+        appointmentRepository.save(appointment);
+
+        // 5. Save
         return prescriptionRepository.save(prescription);
     }
 
     public List<Prescription> getPrescriptionsForPatient(Long patientId) {
         return prescriptionRepository.findByPatientId(patientId);
-    }
-
-    public List<Prescription> getPrescriptionsForDoctor(Long doctorId) {
-        return prescriptionRepository.findByDoctorId(doctorId);
     }
 }

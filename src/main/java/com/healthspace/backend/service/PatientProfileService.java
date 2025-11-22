@@ -1,6 +1,7 @@
 package com.healthspace.backend.service;
-import com.healthspace.backend.entity.User;
+
 import com.healthspace.backend.entity.PatientProfile;
+import com.healthspace.backend.entity.User;
 import com.healthspace.backend.repository.PatientProfileRepository;
 import com.healthspace.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,21 +17,23 @@ public class PatientProfileService {
     private UserRepository userRepository;
 
     public PatientProfile createOrUpdateProfile(Long userId, PatientProfile profileDetails) {
-        // Find the user this profile belongs to
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Check if a profile already exists
         PatientProfile profile = profileRepository.findByUserId(userId)
-                .orElse(new PatientProfile()); // If not, create a new one
+                .orElse(new PatientProfile());
 
-        // Set the details
         profile.setUser(user);
+
+        // New Fields Mapping
+        profile.setDob(profileDetails.getDob());
         profile.setGender(profileDetails.getGender());
-        profile.setAge(profileDetails.getAge());
+        profile.setBloodGroup(profileDetails.getBloodGroup());
+        profile.setHeight(profileDetails.getHeight());
         profile.setWeight(profileDetails.getWeight());
-        profile.setContactNo(profileDetails.getContactNo());
         profile.setAddress(profileDetails.getAddress());
+        profile.setEmergencyContactName(profileDetails.getEmergencyContactName());
+        profile.setEmergencyContactPhone(profileDetails.getEmergencyContactPhone());
 
         return profileRepository.save(profile);
     }

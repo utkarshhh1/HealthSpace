@@ -1,7 +1,8 @@
 package com.healthspace.backend.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "prescriptions")
@@ -11,44 +12,42 @@ public class Prescription {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long patientId;
+    @OneToOne
+    @JoinColumn(name = "appointment_id", nullable = false, unique = true)
+    private Appointment appointment;
 
-    @Column(nullable = false)
+    private Long patientId; // Cached for easy history query
     private Long doctorId;
 
-    // The appointment this prescription was created during
-    @Column(nullable = false)
-    private Long appointmentId;
+    private String diagnosis;
 
-    private LocalDate dateIssued;
-
-    // We can store the list of medicines as a simple text block for now.
-    // A more advanced way is a separate "MedicineItem" table.
     @Column(columnDefinition = "TEXT")
-    private String medicationDetails; // e.g., "Paracetamol: 500mg, 3 times a day"
+    private String notes;
 
-    private String instructions;
+    @OneToMany(mappedBy = "prescription", cascade = CascadeType.ALL)
+    private List<PrescriptionItem> medicines; // The detailed list
 
-    // Getters and Setters
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
+
+    // --- Getters & Setters ---
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-
+    public Appointment getAppointment() { return appointment; }
+    public void setAppointment(Appointment appointment) { this.appointment = appointment; }
     public Long getPatientId() { return patientId; }
     public void setPatientId(Long patientId) { this.patientId = patientId; }
-
     public Long getDoctorId() { return doctorId; }
     public void setDoctorId(Long doctorId) { this.doctorId = doctorId; }
-
-    public Long getAppointmentId() { return appointmentId; }
-    public void setAppointmentId(Long appointmentId) { this.appointmentId = appointmentId; }
-
-    public LocalDate getDateIssued() { return dateIssued; }
-    public void setDateIssued(LocalDate dateIssued) { this.dateIssued = dateIssued; }
-
-    public String getMedicationDetails() { return medicationDetails; }
-    public void setMedicationDetails(String medicationDetails) { this.medicationDetails = medicationDetails; }
-
-    public String getInstructions() { return instructions; }
-    public void setInstructions(String instructions) { this.instructions = instructions; }
+    public String getDiagnosis() { return diagnosis; }
+    public void setDiagnosis(String diagnosis) { this.diagnosis = diagnosis; }
+    public String getNotes() { return notes; }
+    public void setNotes(String notes) { this.notes = notes; }
+    public List<PrescriptionItem> getMedicines() { return medicines; }
+    public void setMedicines(List<PrescriptionItem> medicines) { this.medicines = medicines; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
 }
