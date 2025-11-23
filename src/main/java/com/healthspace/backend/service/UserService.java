@@ -3,6 +3,8 @@ package com.healthspace.backend.service;
 import com.healthspace.backend.entity.User;
 import com.healthspace.backend.repository.UserRepository;
 import com.healthspace.backend.security.JwtUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,6 +18,8 @@ import java.util.Optional;
 @Service
 public class UserService implements UserDetailsService {
 
+    private final Logger logger = LoggerFactory.getLogger(UserService.class);
+
     @Autowired
     private UserRepository userRepository;
 
@@ -26,19 +30,34 @@ public class UserService implements UserDetailsService {
     private JwtUtil jwtUtil;
 
     public User createUser(User user) {
-        user.setRole(user.getRole().toUpperCase());
+        if (user == null) throw new IllegalArgumentException("User payload required");
+
+        // Normalize role
+        if (user.getRole() == null || user.getRole().trim().isEmpty()) {
+            user.setRole("PATIENT");
+        } else {
+            user.setRole(user.getRole().toUpperCase());
+        }
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        // Ensure new fields are handled if passed
         user.setEnabled(true);
-        return userRepository.save(user);
+        User saved = userRepository.save(user);
+        logger.info("Created user id={} email={} role={}", saved.getId(), saved.getEmail(), saved.getRole());
+        return saved;
     }
 
+    /**
+     * Attempts login and returns JWT token if credentials match.
+     * Throws UsernameNotFoundException or RuntimeException for invalid creds.
+     */
     public String loginUser(String email, String password) throws Exception {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         if (passwordEncoder.matches(password, user.getPassword())) {
-            return jwtUtil.generateToken(user);
+            String token = jwtUtil.generateToken((UserDetails) user);
+            logger.info("User logged in id={} email={}", user.getId(), user.getEmail());
+            return token;
         } else {
             throw new Exception("Invalid credentials");
         }

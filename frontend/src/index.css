@@ -1,0 +1,10 @@
+/* Ensure global styles use theme awareness */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Set body background to respond to dark mode */
+body {
+  @apply bg-gray-50 dark:bg-gray-900;
+  font-family: 'Roboto Slab', sans-serif; /* Keep the font you imported */
+}

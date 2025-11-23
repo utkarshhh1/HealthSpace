@@ -10,13 +10,18 @@ import java.util.Optional;
 @Repository
 public interface DoctorProfileRepository extends JpaRepository<DoctorProfile, Long> {
 
+    // Fetch doctor profile by the Auth User ID
     Optional<DoctorProfile> findByUserId(Long userId);
 
+    // Filter by specialty
     List<DoctorProfile> findBySpecialtyContainingIgnoreCase(String specialty);
 
+    // Doctors under one hospital
     List<DoctorProfile> findByHospitalId(Long hospitalId);
 
-    // --- NEW METHOD ---
-    // Finds all doctors linked to a hospital with a specific status
+    // Hospital admin filters
     List<DoctorProfile> findByHospitalIdAndAffiliationStatus(Long hospitalId, String status);
+
+    // Doctor search for verified doctors (most common)
+    List<DoctorProfile> findByAffiliationStatus(String status);
 }

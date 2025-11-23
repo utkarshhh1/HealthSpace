@@ -11,36 +11,44 @@ public class Appointment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long patientId; // Keeping IDs for performance (Clean Cluster Ref)
+    // keep IDs for efficient queries and avoid heavy joins in schedule lists
+    @Column(name = "patient_id", nullable = false)
+    private Long patientId;
 
-    @Column(nullable = false)
+    @Column(name = "doctor_id", nullable = false)
     private Long doctorId;
 
-    @Column(nullable = false)
-    private Long hospitalId; // Context
+    @Column(name = "hospital_id", nullable = false)
+    private Long hospitalId;
 
-    @Column(nullable = false)
+    @Column(name = "appointment_time", nullable = false)
     private LocalDateTime appointmentTime;
 
     @Column(nullable = false)
     private String status; // BOOKED, COMPLETED, CANCELLED
 
+    @Column(columnDefinition = "TEXT")
     private String symptoms; // Reason for visit
 
     // --- Getters & Setters ---
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
+
     public Long getPatientId() { return patientId; }
     public void setPatientId(Long patientId) { this.patientId = patientId; }
+
     public Long getDoctorId() { return doctorId; }
     public void setDoctorId(Long doctorId) { this.doctorId = doctorId; }
+
     public Long getHospitalId() { return hospitalId; }
     public void setHospitalId(Long hospitalId) { this.hospitalId = hospitalId; }
+
     public LocalDateTime getAppointmentTime() { return appointmentTime; }
     public void setAppointmentTime(LocalDateTime appointmentTime) { this.appointmentTime = appointmentTime; }
+
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+
     public String getSymptoms() { return symptoms; }
     public void setSymptoms(String symptoms) { this.symptoms = symptoms; }
 }

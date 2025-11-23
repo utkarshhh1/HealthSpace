@@ -10,28 +10,40 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/hospitals")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:5173","http://localhost:3000"})
 public class HospitalController {
 
     @Autowired
     private HospitalService hospitalService;
 
-    // This endpoint would likely be for 'ADMIN' or a future 'HOSPITAL_ADMIN' role
-    @PostMapping("/register")
-    @PreAuthorize("hasRole('ADMIN')")
-    public Hospital registerHospital(@RequestBody Hospital hospital) {
-        return hospitalService.registerHospital(hospital);
+    // Public: Only see Active hospitals (For patients/doctors searching)
+    @GetMapping
+    public List<Hospital> getActiveHospitals() {
+        return hospitalService.getActiveHospitals();
     }
 
-    // Anyone logged in can see the list of hospitals
-    @GetMapping
-    @PreAuthorize("isAuthenticated()")
+    // Admin: See All (Active + Pending)
+    @GetMapping("/all")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<Hospital> getAllHospitals() {
         return hospitalService.getAllHospitals();
     }
 
+    // Admin: Register directly (Auto-Approve)
+    @PostMapping("/register")
+    @PreAuthorize("hasRole('ADMIN')")
+    public Hospital registerHospital(@RequestBody Hospital hospital) {
+        return hospitalService.registerHospital(hospital, true); // true = auto approve
+    }
+
+    // Admin: Approve a Pending Hospital
+    @PutMapping("/approve/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public Hospital approveHospital(@PathVariable Long id) {
+        return hospitalService.approveHospital(id);
+    }
+
     @GetMapping("/{id}")
-    @PreAuthorize("isAuthenticated()")
     public Hospital getHospitalById(@PathVariable Long id) {
         return hospitalService.getHospitalById(id);
     }
