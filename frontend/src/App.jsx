@@ -1,7 +1,10 @@
 import React, { Suspense, lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import Layout from './components/layout/Layout'; // Note: Updated Path
-import ProtectedRoute from './components/auth/ProtectedRoute'; // Note: Updated Path
+
+// --- Imports ---
+import Layout from './components/layout/Layout';
+import ProtectedRoute from './components/auth/ProtectedRoute';
+import AiAssistant from './components/ui/AiAssistant'; 
 
 // --- Lazy Load Pages ---
 // Auth Pages
@@ -11,7 +14,6 @@ const Register = lazy(() => import('./pages/auth/Register'));
 // Core Pages
 const Unauthorized = lazy(() => import('./pages/core/Unauthorized'));
 const DashboardRouter = lazy(() => import('./pages/core/DashboardRouter'));
-// const NotFound = lazy(() => import('./pages/core/NotFound')); // Optional: create this later
 
 // Feature Pages - Admin
 const AdminProfile = lazy(() => import('./pages/admin/AdminProfile'));
@@ -46,6 +48,10 @@ const LoadingFallback = () => (
 function App() {
   return (
     <Suspense fallback={<LoadingFallback />}>
+      
+      {/* FIX: AiAssistant must be OUTSIDE of <Routes> to persist globally */}
+      <AiAssistant />
+
       <Routes>
         {/* Public Routes */}
         <Route path="/login" element={<Login />} />

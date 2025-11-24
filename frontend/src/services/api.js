@@ -42,14 +42,12 @@ export const createDoctorProfile = (userId, profileData) => api.post(`/profiles/
 export const getAllVerifiedDoctors = () => api.get("/profiles/doctor/verified");
 
 // --- HOSPITAL ADMIN WORKFLOW ---
-// Register their own hospital (Creates Hospital + Links Profile)
 export const registerOwnHospital = (hospitalData) => api.post("/hospital-admin/register-hospital", hospitalData);
-// Get status (Pending/Active)
 export const getHospitalAdminProfile = () => api.get("/hospital-admin/my-profile");
 
 // --- HOSPITALS (SUPER ADMIN) ---
-export const getAllHospitals = () => api.get("/hospitals"); // Public Active List
-export const getAllHospitalsAdmin = () => api.get("/hospitals/all"); // Admin All List
+export const getAllHospitals = () => api.get("/hospitals"); 
+export const getAllHospitalsAdmin = () => api.get("/hospitals/all"); 
 export const getHospitalById = (hospitalId) => api.get(`/hospitals/${hospitalId}`);
 export const registerHospital = (hospitalData) => api.post("/hospitals/register", hospitalData);
 export const approveHospital = (id) => api.put(`/hospitals/approve/${id}`);
@@ -78,5 +76,8 @@ export const approveDoctor = (profileId) => api.put(`/hospital-admin/approve-doc
 export const rejectDoctor = (profileId) => api.put(`/hospital-admin/reject-doctor/${profileId}`);
 export const getHospitalAppointments = () => api.get("/hospital-admin/appointments");
 export const getHospitalPrescriptions = () => api.get("/hospital-admin/prescriptions");
+
+// --- AI ---
+export const consultAi = (data) => api.post("/ai/consult", data);
 
 export default api;

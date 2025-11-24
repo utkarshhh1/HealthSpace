@@ -1,96 +1,204 @@
 package com.healthspace.backend.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.healthspace.backend.entity.Appointment;
 import com.healthspace.backend.entity.DoctorProfile;
 import com.healthspace.backend.entity.PatientProfile;
+import com.healthspace.backend.entity.Prescription;
+import com.healthspace.backend.repository.AppointmentRepository;
 import com.healthspace.backend.repository.DoctorProfileRepository;
 import com.healthspace.backend.repository.PatientProfileRepository;
-import org.springframework.ai.chat.ChatClient;
-import org.springframework.ai.chat.messages.Message;
-import org.springframework.ai.chat.messages.SystemMessage;
-import org.springframework.ai.chat.messages.UserMessage;
-import org.springframework.ai.chat.messages.AssistantMessage;
-import org.springframework.ai.chat.prompt.Prompt;
+import com.healthspace.backend.repository.PrescriptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class AiService {
 
-    private final ChatClient chatClient;
+    @Value("${app.gemini.api-key}")
+    private String geminiKey;
+
+    @Value("${app.gemini.url}")
+    private String geminiUrl;
 
     @Autowired
     private DoctorProfileRepository doctorRepository;
-
     @Autowired
     private PatientProfileRepository patientRepository;
+    @Autowired
+    private AppointmentRepository appointmentRepository;
+    @Autowired
+    private PrescriptionRepository prescriptionRepository;
 
-    public AiService(ChatClient chatClient) {
-        this.chatClient = chatClient;
-    }
+    private final RestClient restClient = RestClient.create();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
-    // Now accepts history + userId for context
-    public String chatWithAi(String userMessage, Long patientId, List<Map<String, String>> history) {
+    public Map<String, Object> getConsultation(String userQuery, Long patientId) {
+        Map<String, Object> finalResponse = new HashMap<>();
+        finalResponse.put("reply", "I apologize, but I am currently unable to access the medical database.");
+        finalResponse.put("recommended_doctor_id", null);
 
-        // 1. Fetch Data for Context
-        List<DoctorProfile> doctors = doctorRepository.findByAffiliationStatus("VERIFIED");
+        try {
+            // 1. BUILD RICH CONTEXT
+            List<DoctorProfile> doctors = doctorRepository.findByAffiliationStatus("VERIFIED");
 
-        String doctorListString = doctors.stream()
-                .map(d -> String.format("[ID:%d] Dr. %s (%s) at %s in %s. Fee: %s",
-                        d.getUser().getId(), d.getUser().getName(), d.getSpecialty(),
-                        d.getHospital().getName(), d.getHospital().getCity(), d.getConsultationFee()))
-                .collect(Collectors.joining("\n"));
+            String doctorList = doctors.isEmpty() ? "No verified doctors available." : doctors.stream()
+                    .map(d -> {
+                        String hospitalName = d.getHospital() != null ? d.getHospital().getName() : "Unaffiliated";
+                        String city = d.getHospital() != null ? d.getHospital().getCity() : "Unknown";
+                        String address = d.getHospital() != null ? d.getHospital().getAddress() : "";
 
-        String patientContext = "Guest User";
-        if(patientId != null) {
-            PatientProfile p = patientRepository.findByUserId(patientId).orElse(null);
-            if(p != null) {
-                patientContext = String.format("Name: %s, Age: %s, Gender: %s, City: %s",
-                        p.getUser().getName(), p.getDob(), p.getGender(), p.getAddress());
-            }
-        }
+                        // Handle Contact Info safely
+                        String contact = "N/A";
+                        if (d.getHospital() != null) {
+                            if (d.getHospital().getWebsite() != null && !d.getHospital().getWebsite().isEmpty()) {
+                                contact = d.getHospital().getWebsite();
+                            } else if (d.getHospital().getContactPhone() != null) {
+                                contact = d.getHospital().getContactPhone();
+                            }
+                        }
 
-        // 2. The "Guardrail" System Prompt
-        String systemText = """
-            You are 'HealthSpace Assistant', a warm and empathetic medical guide.
-            
-            CURRENT PATIENT CONTEXT:
-            %s
-            
-            AVAILABLE DOCTOR NETWORK:
-            %s
-            
-            YOUR RULES:
-            1. **MEDICAL SAFETY:** NEVER prescribe medicines (like 'take Paracetamol'). NEVER suggest dosages.
-            2. **SUGGESTIONS:** You CAN suggest: home remedies (rest, hydration), lifestyle changes, or which specialist to see.
-            3. **booking:** If the user seems sick, ALWAYS recommend a doctor from the list above based on their specialty and city.
-            4. **FORMAT:** If recommending a doctor, format it clearly. If the user says "Book Dr. X", return a special JSON tag: <BOOK_DOCTOR_ID: 123>.
-            5. **TONE:** Be brief, professional, but caring.
-            """.formatted(patientContext, doctorListString);
+                        // SAFE CONVERSION for Fee and Experience to avoid IllegalFormatConversionException
+                        double fee = d.getConsultationFee() != null ? d.getConsultationFee() : 0.0;
+                        int exp = d.getExperienceYears() != null ? d.getExperienceYears() : 0;
 
-        // 3. Build Message History (Context Window)
-        List<Message> messages = new ArrayList<>();
-        messages.add(new SystemMessage(systemText));
+                        // We use %s for strings, %.0f for floating point numbers, %d for integers
+                        return String.format("| %d | Dr. %s | %s | %s | %s | %s | %s | %s | ₹%.0f | %d yrs |",
+                                d.getUser().getId(),
+                                d.getUser().getName(),
+                                d.getDegree() != null ? d.getDegree() : "MBBS",
+                                d.getSpecialty(),
+                                hospitalName,
+                                address,
+                                city,
+                                contact,
+                                fee, // %.0f expects double/float
+                                exp  // %d expects int/long
+                        );
+                    })
+                    .collect(Collectors.joining("\n"));
 
-        // Replay history so AI "remembers"
-        if (history != null) {
-            for (Map<String, String> msg : history) {
-                if ("user".equals(msg.get("role"))) {
-                    messages.add(new UserMessage(msg.get("content")));
-                } else {
-                    messages.add(new AssistantMessage(msg.get("content")));
+            String patientContext = "Guest User (No Record)";
+            String historyContext = "No medical history available.";
+            String scheduleContext = "No upcoming appointments.";
+
+            if (patientId != null) {
+                Optional<PatientProfile> pOpt = patientRepository.findByUserId(patientId);
+                if (pOpt.isPresent()) {
+                    PatientProfile p = pOpt.get();
+                    // Safety check for height/weight formatting
+                    double height = p.getHeight() != null ? p.getHeight() : 0.0;
+                    double weight = p.getWeight() != null ? p.getWeight() : 0.0;
+
+                    patientContext = String.format("Name: %s, Age: %s, Gender: %s, Blood: %s, Height: %.1f, Weight: %.1f",
+                            p.getUser().getName(), p.getDob(), p.getGender(), p.getBloodGroup(), height, weight);
+                }
+
+                List<Prescription> prescriptions = prescriptionRepository.findByPatientIdOrderByCreatedAtDesc(patientId);
+                if (!prescriptions.isEmpty()) {
+                    historyContext = prescriptions.stream()
+                            .limit(5)
+                            .map(rx -> String.format("- %s: %s (Notes: %s)",
+                                    rx.getCreatedAt().toLocalDate(), rx.getDiagnosis(),
+                                    rx.getNotes() != null ? rx.getNotes() : "None"))
+                            .collect(Collectors.joining("\n"));
+                }
+
+                List<Appointment> appointments = appointmentRepository.findByPatientId(patientId);
+                if (!appointments.isEmpty()) {
+                    scheduleContext = appointments.stream()
+                            .filter(a -> "BOOKED".equals(a.getStatus()))
+                            .map(a -> String.format("- %s with Doctor ID %d (%s)",
+                                    a.getAppointmentTime(), a.getDoctorId(),
+                                    a.getSymptoms() != null ? a.getSymptoms() : "Check-up"))
+                            .collect(Collectors.joining("\n"));
                 }
             }
+
+            // 2. SYSTEM PROMPT
+            String systemPrompt = """
+                Act as 'HealthSpace AI', a medical assistant connected to a live database.
+                
+                === DATA CONTEXT ===
+                USER: %s
+                HISTORY: %s
+                SCHEDULE: %s
+                
+                === DOCTOR & HOSPITAL DATABASE (Internal Records) ===
+                | ID | Name | Degree | Specialty | Hospital | Address | City | Contact | Fee | Exp |
+                |---|---|---|---|---|---|---|---|---|---|
+                %s
+
+                === RULES ===
+                1. **CONTENT RICH:** Use degrees, addresses, and specialties to provide detailed answers.
+                
+                2. **STRICT LOCATION CHECK:** Verify 'City' and 'Address'. Do not hallucinate locations not in the list.
+                
+                3. **VISUAL FORMATTING (IMPORTANT):** - When listing doctors, use a Markdown Table.
+                   - **HIDE THE ID COLUMN:** Do NOT show the 'ID' column in the table visible to the user. Only show Name, Specialty, Hospital, Fee, etc.
+                   - **Bold** doctor names.
+                   - *Italicize* specialties.
+                
+                4. **BOOKING:** If the user wants to book, use the internal ID to fill the 'doctor_id' field in the JSON below.
+
+                5. **OUTPUT JSON:**
+                {
+                    "reply": "Markdown text (Table WITHOUT ID column)...",
+                    "doctor_id": 123 (or null)
+                }
+                """.formatted(patientContext, historyContext, scheduleContext, doctorList);
+
+            // 3. CALL GEMINI
+            Map<String, Object> requestBody = Map.of(
+                    "contents", List.of(Map.of("parts", List.of(Map.of("text", systemPrompt + "\n\nUSER QUERY: " + userQuery)))),
+                    "model", "gemini-2.5-flash"
+            );
+
+            String response = restClient.post()
+                    .uri(geminiUrl)
+                    .header("X-goog-api-key", geminiKey)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(requestBody)
+                    .retrieve()
+                    .body(String.class);
+
+            JsonNode root = objectMapper.readTree(response);
+            String rawText = root.path("candidates").get(0).path("content").path("parts").get(0).path("text").asText();
+            String cleanJson = rawText.trim().replace("```json", "").replace("```", "").trim();
+
+            Map<String, Object> aiResult = objectMapper.readValue(cleanJson, Map.class);
+
+            // Post-process
+            Object doctorIdObj = aiResult.get("doctor_id");
+            if (doctorIdObj != null) {
+                try {
+                    Long docIdLong = Long.valueOf(doctorIdObj.toString());
+                    DoctorProfile docProfile = doctorRepository.findByUserId(docIdLong).orElse(null);
+                    if (docProfile != null) {
+                        finalResponse.put("recommended_doctor_id", docIdLong);
+                        finalResponse.put("recommended_doctor_name", docProfile.getUser().getName());
+                        finalResponse.put("recommended_doctor_specialty", docProfile.getSpecialty());
+                    }
+                } catch (Exception e) {}
+            }
+
+            finalResponse.put("reply", (String) aiResult.get("reply"));
+            return finalResponse;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Return a friendly error message if backend logic fails, but log the stack trace for debugging
+            return finalResponse;
         }
-
-        // Add current message
-        messages.add(new UserMessage(userMessage));
-
-        // 4. Call AI
-        return chatClient.call(new Prompt(messages)).getResult().getOutput().getContent();
     }
 }
